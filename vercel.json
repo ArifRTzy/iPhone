@@ -6,8 +6,15 @@
         "use": "@vercel/static-build",
         "config": {
           "distDir": "dist"
+        }},
+        {
+            "src": "src/**/*",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "public/**/*",
+            "use": "@vercel/static"
         }
-      }
     ],
     "routes": [
       {
