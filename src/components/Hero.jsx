@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { heroVideo, smallHeroVideo } from "../utils";
+import { heroVideo, smallHeroVideo } from "/src/utils";
 import { useState } from "react";
 import { useEffect } from "react";
 
@@ -38,13 +38,13 @@ function Hero() {
   }, []);
 
   return (
-    <section className="w-full nav-height bg-black relative">
-      <div className="h-5/6 w-full flex-center flex-col">
+    <section className="relative w-full bg-black nav-height">
+      <div className="flex-col w-full h-5/6 flex-center">
         <p id="hero" className="hero-title">
           iPhone 15 Pro
         </p>
 
-        <div className="md:w-10/12 w-9/12">
+        <div className="w-9/12 md:w-10/12">
           <video
             autoPlay
             muted
@@ -56,9 +56,9 @@ function Hero() {
           </video>
         </div>
 
-        <div id="cta" className="flex flex-col items-center opacity-0 translate-y-20">
+        <div id="cta" className="flex flex-col items-center translate-y-20 opacity-0">
           <a href="#highlights" className="btn">Buy</a>
-          <p className="font-normal text-xl">From $199/month or $999</p>
+          <p className="text-xl font-normal">From $199/month or $999</p>
         </div>
       </div>
     </section>

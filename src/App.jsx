@@ -1,6 +1,6 @@
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import HighLights from "./components/HighLights";
+import Navbar from "/src/components/Navbar";
+import Hero from "/src/components/Hero";
+import HighLights from "/src/components/HighLights";
 
 const App = () => {
   return (
