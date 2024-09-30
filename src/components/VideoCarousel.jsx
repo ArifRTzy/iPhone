@@ -1,15 +1,16 @@
-import { useRef } from "react";
-import { hightlightsSlides } from "../constants";
-import { useState } from "react";
-import { useEffect } from "react";
 import gsap from "gsap";
-import { pauseImg, playImg, replayImg } from "../utils";
+import { useState, useRef, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/all";
+gsap.registerPlugin(ScrollTrigger);
+
+import { hightlightsSlides } from "../constants";
+import { pauseImg, playImg, replayImg } from "../utils";
 
 function VideoCarousel() {
-  const videoRef = useRef([]);
-  const videoSpanRef = useRef([]);
-  const videoDivRef = useRef([]);
+  const videoRef = useRef([]); //for store every videos
+  const videoSpanRef = useRef([]);//for store every dots animated
+  const videoDivRef = useRef([]);//for store every dots parent
 
   const [video, setVideo] = useState({
     isEnd: false,
@@ -24,52 +25,40 @@ function VideoCarousel() {
 
   useGSAP(() => {
     gsap.to("#slider", {
-      transform: `translateX(${-100 * videoId}%)`,
+      transform: `translateX(${-100 * videoId}%)`,//move the video to the left
       duration: 2,
-      ease: "power2.inOut",
+      ease: "power2.inOut",//slow then fast
     });
 
     gsap.to("#video", {
-      ScrollTrigger: {
-        trigger: "#video",
-        toggleActions: "restart none none none",
+      scrollTrigger: {
+        trigger: "#video",//trigger the video element
+        toggleActions: "restart none none none",//the animation will restart when the element enter the viewport or the animation will start when it is in viewport
       },
-      onComplete: () => {
+      onComplete: () => { //do something when the animation is finished
         setVideo((pre) => ({
           ...pre,
-          startPlay: true,
-          isPlaying: true,
+          startPlay: true,//change the value of startPlay to true
+          isPlaying: true,//isPlaying to true
         }));
       },
     });
   }, [isEnd, videoId]);
 
   useEffect(() => {
-    if (loadedData.length > 3) {
-      if (!isPlaying) {
-        videoRef.current[videoId].pause();
-      } else {
-        startPlay && videoRef.current[videoId].play();
-      }
-    }
-  }, [startPlay, videoId, isPlaying, loadedData]);
-
-  const handleLoadedMetaData = (i, e) => setLoadedData((pre) => [...pre, e]);
-
-  useEffect(() => {
     let currentProgress = 0;
-    let span = videoSpanRef.current;
+    let span = videoSpanRef.current;//call the span that contain dots
 
     if (span[videoId]) {
       //animate the progress of the video
       let anim = gsap.to(span[videoId], {
-        onUpdate: () => {
-          const progress = Math.ceil(anim.progress() * 100);
+        onUpdate: () => {//do something when the animation is playing
+          const progress = Math.ceil(anim.progress() * 100);//check the animation progress by 0 to 1 from the animUpdate function then multiply by 100 then rounded to the closest number
 
           if (progress != currentProgress) {
-            currentProgress = progress;
+            currentProgress = progress;//mengganti value dari currentProgress
 
-            gsap.to(videoDivRef.current[videoId], {
+            gsap.to(videoDivRef.current[videoId], {//change the width of the dot when the animation started
               width:
                 window.innerWidth < 760
                   ? "10vw"
@@ -78,13 +67,13 @@ function VideoCarousel() {
                   : "4vw",
             });
 
-            gsap.to(span[videoId], {
+            gsap.to(span[videoId], {//change the width of the dot to like the video duration
               width: `${currentProgress}%`,
               backgroundColor: "white",
             });
           }
         },
-        onComplete: () => {
+        onComplete: () => {//return the original width of the dot
           if (isPlaying) {
             gsap.to(videoDivRef.current[videoId], {
               width: "12px",
@@ -96,24 +85,36 @@ function VideoCarousel() {
         },
       });
 
-      if (videoId === 0) {
+      if (videoId == 0) {//restart the animation if the videoId is zero
         anim.restart();
       }
 
       const animUpdate = () => {
         anim.progress(
-          videoRef.current[videoId].currentTime /
-            hightlightsSlides[videoId].videoDuration
+          videoRef.current[videoId].currentTime / //the current playback position
+            hightlightsSlides[videoId].videoDuration //the full duration of the video
         );
       };
 
       if (isPlaying) {
-        gsap.ticker.add(animUpdate);
+        gsap.ticker.add(animUpdate);//add the function animUpdate to every video is started
+        console.log("start animUpdate")
       } else {
-        gsap.ticker.remove(animUpdate);
+        gsap.ticker.remove(animUpdate);//remove the function
+        console.log("removed animUpdate")
       }
     }
   }, [videoId, startPlay, isPlaying]);
+
+  useEffect(() => {
+    if (loadedData.length > 3) {//check if all the videos is fully loaded
+      if (!isPlaying) {
+        videoRef.current[videoId].pause();
+      } else {
+        startPlay && videoRef.current[videoId].play();
+      }
+    }
+  }, [startPlay, videoId, isPlaying, loadedData]);
 
   const handleProcess = (type, i) => {
     switch (type) {
@@ -153,6 +154,8 @@ function VideoCarousel() {
         return video;
     }
   };
+
+  const handleLoadedMetaData = (i, e) => setLoadedData((pre) => [...pre, e]);
 
   return (
     <>
