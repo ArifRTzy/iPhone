@@ -1,5 +1,14 @@
+<<<<<<< HEAD
 import gsap from "gsap";
 import { useState, useRef, useEffect } from "react";
+=======
+import { useRef } from "react";
+import { hightlightsSlides } from "/src/constants";
+import { useState } from "react";
+import { useEffect } from "react";
+import gsap from "gsap";
+import { pauseImg, playImg, replayImg } from "/src/utils";
+>>>>>>> c7f527a6518e68cb8441998828b5c5b9f3b5ed04
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
 gsap.registerPlugin(ScrollTrigger);
@@ -161,9 +170,9 @@ function VideoCarousel() {
     <>
       <div className="flex items-center">
         {hightlightsSlides.map((list, i) => (
-          <div key={list.id} id="slider" className="sm:pr-20 pr-10">
+          <div key={list.id} id="slider" className="pr-10 sm:pr-20">
             <div className="video-carousel_container">
-              <div className="w-full h-full flex-center rounded-3xl overflow-hidden bg-black">
+              <div className="w-full h-full overflow-hidden bg-black flex-center rounded-3xl">
                 <video
                   id="video"
                   playsInline={true}
@@ -190,7 +199,7 @@ function VideoCarousel() {
               </div>
               <div className="absolute top-12 left-[5%] z-10">
                 {list.textLists.map((text) => (
-                  <p key={text} className="md:text-2xl text-xl font-medium">
+                  <p key={text} className="text-xl font-medium md:text-2xl">
                     {text}
                   </p>
                 ))}
@@ -200,16 +209,16 @@ function VideoCarousel() {
         ))}
       </div>
 
-      <div className="relative flex-center mt-10">
-        <div className="flex-center py-5 px-7 bg-gray-300 backdrop-blur rounded-full">
+      <div className="relative mt-10 flex-center">
+        <div className="py-5 bg-gray-300 rounded-full flex-center px-7 backdrop-blur">
           {videoRef.current.map((_, i) => (
             <span
               key={i}
               ref={(el) => (videoDivRef.current[i] = el)}
-              className="mx-2 w-3 h-3 bg-gray-200 rounded-full relative cursor-pointer"
+              className="relative w-3 h-3 mx-2 bg-gray-200 rounded-full cursor-pointer"
             >
               <span
-                className="absolute h-full w-full rounded-full"
+                className="absolute w-full h-full rounded-full"
                 ref={(el) => (videoSpanRef.current[i] = el)}
               />
             </span>
